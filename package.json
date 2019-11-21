@@ -35,7 +35,7 @@
     "publish": "npm publish"
   },
   "dependencies": {
-    "core-js": "^3.3.2",
+    "core-js": "^2.6.10",
     "vue": "^2.6.10"
   },
   "devDependencies": {
