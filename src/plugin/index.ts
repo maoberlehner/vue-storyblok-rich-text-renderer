@@ -18,7 +18,7 @@ const RichTextVueRenderer: PluginObject<Options> = {
         }
       },
       render (h, ctx) {
-        return h('h1', ctx.props.document.lorem)
+        return h('h1', 'Test')
       }
     })
 
