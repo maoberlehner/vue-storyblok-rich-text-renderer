@@ -1,0 +1,53 @@
+{
+  "name": "storyblok-rich-text-vue-renderer",
+  "description": "Vue.js plugin to render rich text content from Storyblok",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Marvin Rudolph",
+    "email": "info@marvin-rudolph.de"
+  },
+  "keywords": [
+    "storyblok",
+    "vue",
+    "rich",
+    "text",
+    "resolve",
+    "plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarvinRudolph/storyblok-rich-text-vue-resolver"
+  },
+  "files": [
+    "dist"
+  ],
+  "typings": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "lint": "vue-cli-service lint",
+    "build": "npm run build:lib && npm run build:types",
+    "build:lib": "vue-cli-service build --target lib --name storyblok-rich-text-vue-renderer src/plugin/index.ts",
+    "build:types": "tsc -d src/plugin/index.ts --declarationDir dist --emitDeclarationOnly",
+    "publish": "npm publish"
+  },
+  "dependencies": {
+    "core-js": "^3.3.2",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.0.0",
+    "@vue/cli-plugin-eslint": "^4.0.0",
+    "@vue/cli-plugin-typescript": "^4.0.0",
+    "@vue/cli-service": "^4.0.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/eslint-config-typescript": "^4.0.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "typescript": "~3.5.3",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
