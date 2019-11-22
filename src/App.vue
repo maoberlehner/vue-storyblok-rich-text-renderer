@@ -1,9 +1,12 @@
 <template>
-  <rich-text-resolver :document="document" />
+  <div>
+    <rich-text-resolver :document="document" :markRenderers="renderMarks" />
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { CreateElement } from 'vue'
+import { Marks } from './rich-text-types'
 
 export default Vue.extend({
   data () {
@@ -46,6 +49,9 @@ export default Vue.extend({
           }
         ],
         type: 'doc'
+      },
+      renderMarks: {
+        [Marks.BOLD]: (text: string, key: string, h: CreateElement) => h('custom-bold', { key }, text)
       }
     }
   }

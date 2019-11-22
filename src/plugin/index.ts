@@ -1,11 +1,9 @@
 import { PluginObject } from 'vue'
+import { buildRenderer, renderNodeList, NodeRenderers, MarkRenderers } from './renderers'
+import { RichTextDocument } from '../rich-text-types'
 
 export interface Options {
   [key: string]: any
-}
-
-interface Jo {
-  lorem: string
 }
 
 const RichTextVueRenderer: PluginObject<Options> = {
@@ -14,11 +12,20 @@ const RichTextVueRenderer: PluginObject<Options> = {
       functional: true,
       props: {
         document: {
-          type: Object as () => Jo
+          type: Object as () => RichTextDocument,
+          required: true
+        },
+        nodeRenderers: {
+          type: Object as () => NodeRenderers
+        },
+        markRenderers: {
+          type: Object as () => MarkRenderers
         }
       },
       render (h, ctx) {
-        return h('h1', 'Test')
+        const renderer = buildRenderer(ctx.props.nodeRenderers, ctx.props.markRenderers, h)
+
+        return renderNodeList(ctx.props.document.content, 'RichText', renderer)
       }
     })
 
