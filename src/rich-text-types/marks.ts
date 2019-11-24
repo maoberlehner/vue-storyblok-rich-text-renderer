@@ -1,10 +1,10 @@
 enum Marks {
   BOLD = 'bold',
+  STRONG = 'strong',
   STRIKE = 'strike',
   UNDERLINE = 'underline',
-  STRONG = 'strong',
-  CODE = 'code',
-  ITALIC = 'italic'
+  ITALIC = 'italic',
+  CODE = 'code'
 }
 
 export default Marks

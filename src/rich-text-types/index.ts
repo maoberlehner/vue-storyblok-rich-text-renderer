@@ -1,3 +1,6 @@
+import Blocks from './blocks'
+import Inlines from './inlines'
+import Marks from './marks'
 import * as helpers from './helpers'
 
 export interface RichTextDocument {
@@ -5,14 +8,13 @@ export interface RichTextDocument {
 }
 
 export interface Node {
+  type: Blocks,
   [key: string]: any
 }
 
 export interface Mark {
+  type: Marks,
   [key: string]: any
 }
 
-export { default as Blocks } from './blocks'
-export { default as Inlines } from './inlines'
-export { default as Marks } from './marks'
-export { helpers }
+export { Blocks, Inlines, Marks, helpers }

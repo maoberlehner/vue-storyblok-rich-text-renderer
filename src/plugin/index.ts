@@ -1,13 +1,13 @@
 import { PluginObject } from 'vue'
-import { buildRenderer, renderNodeList, NodeRenderers, MarkRenderers } from './renderers'
+import { buildRenderer, renderNodeList, NodeRenderers, MarkRenderers, ComponentResolvers } from './renderer'
 import { RichTextDocument } from '../rich-text-types'
 
 export interface Options {
-  [key: string]: any
+  resolveComponents?: ComponentResolvers
 }
 
 const RichTextVueRenderer: PluginObject<Options> = {
-  install (Vue, options?: Options) {
+  install (Vue, options: Options = {}) {
     const RichTextRenderer = Vue.extend({
       functional: true,
       props: {
@@ -23,13 +23,12 @@ const RichTextVueRenderer: PluginObject<Options> = {
         }
       },
       render (h, ctx) {
-        const renderer = buildRenderer(ctx.props.nodeRenderers, ctx.props.markRenderers, h)
-
+        const renderer = buildRenderer({ ...options.resolveComponents }, h)
         return renderNodeList(ctx.props.document.content, 'RichText', renderer)
       }
     })
 
-    Vue.component('rich-text-resolver', RichTextRenderer)
+    Vue.component('rich-text-renderer', RichTextRenderer)
   }
 }
 

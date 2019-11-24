@@ -35,7 +35,7 @@
     "publish": "npm publish"
   },
   "dependencies": {
-    "core-js": "^3.3.2",
+    "core-js": "^2.6.10",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -47,6 +47,7 @@
     "@vue/eslint-config-typescript": "^4.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "storyblok-js-client": "1.0.34",
     "typescript": "~3.5.3",
     "vue-template-compiler": "^2.6.10"
   }
