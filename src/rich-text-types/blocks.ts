@@ -9,7 +9,8 @@ enum Blocks {
   HR = 'horizontal_rule',
   BR = 'hard_break',
   IMAGE = 'image',
-  COMPONENT = 'blok'
+  COMPONENT = 'blok',
+  TEXT = 'text'
 }
 
 export default Blocks

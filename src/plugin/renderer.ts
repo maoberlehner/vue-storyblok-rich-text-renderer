@@ -1,12 +1,43 @@
-import { Blocks, Marks, helpers, Node, Mark } from '../rich-text-types'
+import { Blocks, Marks, helpers, RichTextNode, Mark } from '../rich-text-types'
 import { CreateElement, VNode } from 'vue'
 
 export interface NodeRendererFunction {
-  (node: Node, key: string, h: CreateElement, next: Function, componentRenderers: ComponentRenderers): VNode | VNode[]
+  (node: RichTextNode, key: string, h: CreateElement, next: Function): VNode | VNode[]
 }
 
 export interface MarkRendererFunction {
   (text: string, key: string, h: CreateElement): VNode
+}
+
+export type NodeRenderers = {
+  [key: string]: NodeRendererFunction
+}
+
+export type MarkRenderers = {
+  [key: string]: MarkRendererFunction
+}
+
+export type ComponentRenderers = {
+  [key: string]: Function
+}
+
+export type TagFunction = (node: RichTextNode) => string
+
+export interface NodeResolver {
+  tag?: string | TagFunction
+  render?: (node: RichTextNode, key: string, h: CreateElement, next: Function, componentRenderers: ComponentRenderers) => VNode | VNode[]
+}
+
+export interface NodeResolvers {
+  [key: string]: NodeResolver
+}
+
+export interface MarkResolver {
+  tag: string
+}
+
+export interface MarkResolvers {
+  [key: string]: MarkResolver
 }
 
 export interface ComponentResolver {
@@ -18,18 +49,6 @@ export type ComponentResolvers = {
   [key: string]: ComponentResolver
 }
 
-export type NodeRenderers = {
-  [key in Blocks]: NodeRendererFunction
-}
-
-export type MarkRenderers = {
-  [key in Marks]: MarkRendererFunction
-}
-
-export type ComponentRenderers = {
-  [key: string]: Function
-}
-
 export interface RichTextRenderer {
   node: NodeRenderers,
   mark: MarkRenderers,
@@ -37,18 +56,86 @@ export interface RichTextRenderer {
   createElement: CreateElement
 }
 
-const defaultComponentResolver = (node: Node, key: string, h: CreateElement) => h('div', { key }, `No resolver for component "${node.component}" found!`)
+const defaultNodeResolvers: NodeResolvers = {
+  [Blocks.HEADING]: {
+    tag: (node) => {
+      return node.attrs.level ? `h${node.attrs.level}` : 'h2'
+    }
+  },
+  [Blocks.PARAGRAPH]: {
+    tag: 'p'
+  },
+  [Blocks.QUOTE]: {
+    tag: 'blockquote'
+  },
+  [Blocks.OL_LIST]: {
+    tag: 'ol'
+  },
+  [Blocks.UL_LIST]: {
+    tag: 'ul'
+  },
+  [Blocks.LIST_ITEM]: {
+    tag: 'li'
+  },
+  [Blocks.CODE_BLOCK]: {
+    tag: 'code'
+  },
+  [Blocks.HR]: {
+    tag: 'hr'
+  },
+  [Blocks.BR]: {
+    tag: 'br'
+  },
+  [Blocks.IMAGE]: {
+    tag: 'img'
+  },
+  [Blocks.COMPONENT]: {
+    render: (node, key, h, next, componentRenderers) => {
+      const resolvers: any[] = []
 
-const defaultMarkRenderers: MarkRenderers = {
-  [Marks.BOLD]: (text, key, h) => h('strong', { key }, text),
-  [Marks.STRONG]: (text, key, h) => h('strong', { key }, text),
-  [Marks.STRIKE]: (text, key, h) => h('s', { key }, text),
-  [Marks.UNDERLINE]: (text, key, h) => h('u', { key }, text),
-  [Marks.ITALIC]: (text, key, h) => h('i', { key }, text),
-  [Marks.CODE]: (text, key, h) => h('code', { key }, text)
+      node.attrs.body.forEach((item: RichTextNode, i: number) => {
+        const scopedKey = `${key}-${i}`
+        const resolvedComponent = componentRenderers[item.component]
+        resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
+      })
+
+      return resolvers
+    }
+  }
 }
 
-const defaultNodeRenderers: NodeRenderers = {
+const defaultMarkResolvers: MarkResolvers = {
+  [Marks.BOLD]: {
+    tag: 'strong'
+  },
+  [Marks.STRONG]: {
+    tag: 'strong'
+  },
+  [Marks.STRIKE]: {
+    tag: 's'
+  },
+  [Marks.UNDERLINE]: {
+    tag: 'u'
+  },
+  [Marks.ITALIC]: {
+    tag: 'i'
+  },
+  [Marks.CODE]: {
+    tag: 'code'
+  }
+}
+
+const defaultComponentResolver = (node: RichTextNode, key: string, h: CreateElement) => {
+  const style = {
+    color: 'red',
+    border: '1px dashed red',
+    padding: '10px'
+  }
+
+  return h('div', { key, style }, `No resolver for component "${node.component}" found!`)
+}
+
+/* const defaultNodeRenderers: NodeRenderers = {
   [Blocks.HEADING]: (node, key, h, next) => {
     const tag = node.attrs.level ? `h${node.attrs.level}` : 'h2'
     return h(tag, { key }, next(node.content, key, h, next))
@@ -85,7 +172,7 @@ const defaultNodeRenderers: NodeRenderers = {
   [Blocks.COMPONENT]: (node, key, h, next, componentRenderers) => {
     const resolvers: any[] = []
 
-    node.attrs.body.forEach((item: Node, i: number) => {
+    node.attrs.body.forEach((item: RichTextNode, i: number) => {
       const scopedKey = `${key}-${i}`
       const resolvedComponent = componentRenderers[item.component]
       resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
@@ -93,9 +180,9 @@ const defaultNodeRenderers: NodeRenderers = {
 
     return resolvers
   }
-}
+} */
 
-const textRenderer = ({ text, marks }: Node, key: string, h: CreateElement, markRenderer: MarkRenderers) => {
+const textRenderer = ({ text, marks }: RichTextNode, key: string, h: CreateElement, markRenderer: MarkRenderers) => {
   return marks && marks.length
     ? marks.reduce(
       (aggregate: string, mark: Mark, i: number) => markRenderer[mark.type](aggregate, `${key}-${i}`, h),
@@ -104,11 +191,11 @@ const textRenderer = ({ text, marks }: Node, key: string, h: CreateElement, mark
     : text
 }
 
-const renderNodeList = (nodes: Node[], key: string, renderer: RichTextRenderer) => {
+const renderNodeList = (nodes: RichTextNode[], key: string, renderer: RichTextRenderer) => {
   return nodes.map((node, i) => renderNode(node, `${key}-${i}`, renderer))
 }
 
-const renderNode = (node: Node, key: string, renderer: RichTextRenderer) => {
+const renderNode = (node: RichTextNode, key: string, renderer: RichTextRenderer) => {
   const nodeRenderer = renderer.node
   const createElement = renderer.createElement
 
@@ -116,16 +203,50 @@ const renderNode = (node: Node, key: string, renderer: RichTextRenderer) => {
     const markRenderer = renderer.mark
     return textRenderer(node, key, createElement, markRenderer)
   } else {
-    const nextNode = (nodes: Node[]) => renderNodeList(nodes, key, renderer)
+    const nextNode = (nodes: RichTextNode[]) => renderNodeList(nodes, key, renderer)
     const blockRenderer = nodeRenderer[node.type]
-    const componentRenderers = renderer.component
 
     if (!blockRenderer) {
-      return nodeRenderer['paragraph'](node, key, createElement, nextNode, componentRenderers)
+      return nodeRenderer['paragraph'](node, key, createElement, nextNode)
     }
 
-    return blockRenderer(node, key, createElement, nextNode, componentRenderers)
+    return blockRenderer(node, key, createElement, nextNode)
   }
+}
+
+const buildMarkRenderers = (markResolvers: MarkResolvers, h: CreateElement) => {
+  const markRenderers: MarkRenderers = {}
+
+  for (const key in markResolvers) {
+    if (markResolvers.hasOwnProperty(key)) {
+      const resolver = markResolvers[key]
+      markRenderers[key] = (text, key, h) => {
+        return h(resolver.tag, { key }, text)
+      }
+    }
+  }
+
+  return markRenderers
+}
+
+const buildNodeRenderers = (nodeResolvers: NodeResolvers, componentRenderers: ComponentRenderers, h: CreateElement) => {
+  const nodeRenderers: NodeRenderers = {}
+
+  for (const key in nodeResolvers) {
+    if (nodeResolvers.hasOwnProperty(key)) {
+      const resolver = nodeResolvers[key]
+      nodeRenderers[key] = (node, key, h, next) => {
+        if (resolver.render) {
+          return resolver.render(node, key, h, next, componentRenderers)
+        }
+
+        const tag = typeof resolver.tag === 'function' ? resolver.tag(node) : resolver.tag
+        return h(tag, { key }, !helpers.isVoidElement(node) ? next(node.content, key, h, next) : null)
+      }
+    }
+  }
+
+  return nodeRenderers
 }
 
 const buildComponentRenderers = (componentResolvers: ComponentResolvers, h: CreateElement) => {
@@ -134,7 +255,7 @@ const buildComponentRenderers = (componentResolvers: ComponentResolvers, h: Crea
   for (const key in componentResolvers) {
     if (componentResolvers.hasOwnProperty(key)) {
       const resolver = componentResolvers[key]
-      componentRenderers[key] = (node: Node, key: string, h: CreateElement) => {
+      componentRenderers[key] = (node: RichTextNode, key: string, h: CreateElement) => {
         let props = {}
 
         if (resolver.passProps) {
@@ -155,15 +276,17 @@ const buildComponentRenderers = (componentResolvers: ComponentResolvers, h: Crea
   return componentRenderers
 }
 
-const buildRenderer = (componentResolvers: ComponentResolvers | {}, h: CreateElement): RichTextRenderer => {
+const buildRenderer = (h: CreateElement, componentResolvers: ComponentResolvers | {}, nodeResolvers: NodeResolvers, markResolvers: MarkResolvers): RichTextRenderer => {
   const componentRenderers = buildComponentRenderers(componentResolvers, h)
+  const nodeRenderers = buildNodeRenderers({ ...defaultNodeResolvers, ...nodeResolvers }, componentRenderers, h)
+  const markRenderers = buildMarkRenderers({ ...defaultMarkResolvers, ...markResolvers }, h)
 
   return {
     node: {
-      ...defaultNodeRenderers
+      ...nodeRenderers
     },
     mark: {
-      ...defaultMarkRenderers
+      ...markRenderers
     },
     component: {
       ...componentRenderers

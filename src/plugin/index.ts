@@ -1,9 +1,11 @@
 import { PluginObject } from 'vue'
-import { buildRenderer, renderNodeList, NodeRenderers, MarkRenderers, ComponentResolvers } from './renderer'
+import { NodeResolvers, ComponentResolvers, MarkResolvers, buildRenderer, renderNodeList, NodeRenderers, MarkRenderers } from './renderer'
 import { RichTextDocument } from '../rich-text-types'
 
 export interface Options {
-  resolveComponents?: ComponentResolvers
+  nodeResolvers?: NodeResolvers
+  componentResolvers?: ComponentResolvers
+  markResolvers?: MarkResolvers
 }
 
 const RichTextVueRenderer: PluginObject<Options> = {
@@ -23,7 +25,7 @@ const RichTextVueRenderer: PluginObject<Options> = {
         }
       },
       render (h, ctx) {
-        const renderer = buildRenderer({ ...options.resolveComponents }, h)
+        const renderer = buildRenderer(h, { ...options.componentResolvers }, { ...options.nodeResolvers }, { ...options.markResolvers })
         return renderNodeList(ctx.props.document.content, 'RichText', renderer)
       }
     })

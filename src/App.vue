@@ -16,12 +16,12 @@ export default Vue.extend({
     }
   },
   async mounted () {
-    /* const Storyblok = new StoryblokClient({
-      accessToken: ''
+    const Storyblok = new StoryblokClient({
+      accessToken: 'bHMwF3yN4rn5WSXR06NZ1Qtt'
     })
 
     const { data } = await Storyblok.get('cdn/stories/rich-text')
-    this.document = data.story.content.text */
+    this.document = data.story.content.text
   }
 })
 </script>

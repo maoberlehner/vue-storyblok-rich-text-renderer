@@ -4,10 +4,10 @@ import Marks from './marks'
 import * as helpers from './helpers'
 
 export interface RichTextDocument {
-  content: Node[]
+  content: RichTextNode[]
 }
 
-export interface Node {
+export interface RichTextNode {
   type: Blocks,
   [key: string]: any
 }
