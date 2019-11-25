@@ -1,5 +1,8 @@
 import { PluginObject } from 'vue'
-import { NodeResolvers, ComponentResolvers, MarkResolvers, buildRenderer, renderNodeList, NodeRenderers, MarkRenderers } from './renderer'
+import { buildRenderer, renderNodeList } from '../renderer'
+import { NodeResolvers } from '../renderer/node'
+import { ComponentResolvers } from '../renderer/component'
+import { MarkResolvers } from '../renderer/mark'
 import { RichTextDocument } from '../rich-text-types'
 
 export interface Options {
@@ -16,12 +19,6 @@ const RichTextVueRenderer: PluginObject<Options> = {
         document: {
           type: Object as () => RichTextDocument,
           required: true
-        },
-        nodeRenderers: {
-          type: Object as () => NodeRenderers
-        },
-        markRenderers: {
-          type: Object as () => MarkRenderers
         }
       },
       render (h, ctx) {

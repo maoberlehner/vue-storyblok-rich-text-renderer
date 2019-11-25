@@ -1,14 +1,19 @@
 import Vue from 'vue'
 import RichTextRenderer from './plugin'
 import App from './App.vue'
-import { Blocks, Marks } from './rich-text-types'
 
 Vue.config.productionTip = false
 Vue.use(RichTextRenderer, {
   componentResolvers: {
     'button': {
-      component: 'button',
-      passProps: ['sub']
+      component: 'test',
+      data: (node) => {
+        return {
+          props: {
+            test: 'Awesome prop'
+          }
+        }
+      }
     }
   }
 })
