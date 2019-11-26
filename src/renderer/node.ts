@@ -1,7 +1,7 @@
 import { CreateElement, VNode } from 'vue'
-import { RichTextNode, Blocks, helpers } from '../rich-text-types'
-import { ComponentRenderers, defaultComponentResolver } from './component'
-import { TagRenderFunction } from './'
+import { RichTextNode, Blocks, helpers } from '@/rich-text-types'
+import { ComponentRenderers, defaultComponentResolver } from '@/renderer/component'
+import { TagRenderFunction } from '@/renderer'
 
 interface NodeResolver {
   tag?: string | TagRenderFunction
