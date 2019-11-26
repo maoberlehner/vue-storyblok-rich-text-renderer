@@ -1,5 +1,4 @@
 import Blocks from '@/rich-text-types/blocks'
-import Inlines from '@/rich-text-types/inlines'
 import Marks from '@/rich-text-types/marks'
 import * as helpers from '@/rich-text-types/helpers'
 
@@ -17,4 +16,4 @@ export interface Mark {
   [key: string]: any
 }
 
-export { Blocks, Inlines, Marks, helpers }
+export { Blocks, Marks, helpers }
