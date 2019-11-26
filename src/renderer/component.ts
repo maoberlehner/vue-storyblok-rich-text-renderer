@@ -1,5 +1,5 @@
-import { RichTextNode } from '@/rich-text-types'
 import { CreateElement, VNodeData } from 'vue'
+import { RichTextNode } from '@/rich-text-types'
 
 interface ComponentResolver {
   component: string
