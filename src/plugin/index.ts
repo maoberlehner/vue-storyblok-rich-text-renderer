@@ -1,9 +1,9 @@
 import { PluginObject } from 'vue'
-import { buildRenderer, renderNodeList } from '../renderer'
-import { NodeResolvers } from '../renderer/node'
-import { ComponentResolvers } from '../renderer/component'
-import { MarkResolvers } from '../renderer/mark'
-import { RichTextDocument } from '../rich-text-types'
+import { buildRenderer, renderNodeList } from '@/renderer'
+import { NodeResolvers } from '@/renderer/node'
+import { ComponentResolvers } from '@/renderer/component'
+import { MarkResolvers } from '@/renderer/mark'
+import { RichTextDocument } from '@/rich-text-types'
 
 export interface Options {
   nodeResolvers?: NodeResolvers
