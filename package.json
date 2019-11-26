@@ -15,8 +15,9 @@
     "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
     "publish": "npm publish"
   },
+  "main": "dist/storyblok-rich-text-vue-renderer.common.js",
   "files": [
-    "dist"
+    "dist/*"
   ],
   "dependencies": {
     "core-js": "^2.6.10",
@@ -55,5 +56,5 @@
     "type": "git",
     "url": "https://github.com/MarvinRudolph/storyblok-rich-text-vue-resolver"
   },
-  "typings": "dist/index.d.ts"
+  "typings": "dist/plugin/index.d.ts"
 }
