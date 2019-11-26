@@ -18,7 +18,8 @@ const defaultComponentResolver = (node: RichTextNode, key: string, h: CreateElem
   const style = {
     color: 'red',
     border: '1px dashed red',
-    padding: '10px'
+    padding: '10px',
+    marginBottom: '10px'
   }
 
   return h('div', { key, style }, `No resolver for component "${node.component}" found!`)
@@ -26,11 +27,10 @@ const defaultComponentResolver = (node: RichTextNode, key: string, h: CreateElem
 
 const buildComponentRenderers = (componentResolvers: ComponentResolvers) => {
   const componentRenderers: ComponentRenderers = {}
-  const mergedResolvers: ComponentResolvers = { ...defaultComponentResolver, ...componentResolvers }
 
-  for (const key in mergedResolvers) {
-    if (mergedResolvers.hasOwnProperty(key)) {
-      const resolver = mergedResolvers[key]
+  for (const key in componentResolvers) {
+    if (componentResolvers.hasOwnProperty(key)) {
+      const resolver = componentResolvers[key]
       componentRenderers[key] = (node: RichTextNode, key: string, h: CreateElement) => {
         const data = resolver.data ? { key, ...resolver.data(node) } : { key }
         return h(resolver.component, data)
