@@ -1,5 +1,5 @@
 {
-  "name": "storyblok-rich-text-vue-renderer",
+  "name": "vue-storyblok-rich-text-renderer",
   "version": "0.1.0",
   "description": "Vue.js plugin to render rich text content from Storyblok",
   "author": {
@@ -11,11 +11,11 @@
     "build": "npm run build:lib && npm run build:types",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "build:lib": "vue-cli-service build --target lib --name storyblok-rich-text-vue-renderer src/plugin/index.ts",
+    "build:lib": "vue-cli-service build --target lib --name vue-storyblok-rich-text-renderer src/plugin/index.ts",
     "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
     "release": "yarn build && standard-version && git push --follow-tags && npm publish --access public"
   },
-  "main": "dist/storyblok-rich-text-vue-renderer.common.js",
+  "main": "dist/vue-storyblok-rich-text-renderer.common.js",
   "files": [
     "dist/*"
   ],
@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MarvinRudolph/storyblok-rich-text-vue-resolver"
+    "url": "https://github.com/MarvinRudolph/vue-storyblok-rich-text-renderer"
   },
   "typings": "dist/plugin/index.d.ts"
 }

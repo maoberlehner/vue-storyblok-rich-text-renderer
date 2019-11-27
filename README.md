@@ -130,4 +130,4 @@ If you don't use custom components in your rich text content everything should b
 [license-src]: https://img.shields.io/npm/l/@marvinrudolph/vue-storyblok-rich-text-renderer.svg?style=flat-square
 [license-href]: https://npmjs.com/package/@marvinrudolph/vue-storyblok-rich-text-renderer
 
-[vue-version-src]: https://img.shields.io/badge/dynamic/json.svg?label=vue.js&url=https%3A%2F%2Fraw.githubusercontent.com%2FMarvinRudolph%2Fstoryblok-rich-text-vue-renderer%2Fmaster%2Fpackage.json&query=dependencies.vue&colorB=blue&style=flat-square
+[vue-version-src]: https://img.shields.io/badge/dynamic/json.svg?label=vue.js&url=https%3A%2F%2Fraw.githubusercontent.com%2FMarvinRudolph%2Fvue-storyblok-rich-text-renderer%2Fmaster%2Fpackage.json&query=dependencies.vue&colorB=blue&style=flat-square
