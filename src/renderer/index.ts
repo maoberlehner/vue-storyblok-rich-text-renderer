@@ -11,8 +11,6 @@ export interface RichTextRenderer {
   createElement: CreateElement
 }
 
-export type TagRenderFunction = (node: RichTextNode) => string
-
 const buildRenderer = (
   h: CreateElement,
   componentResolvers: ComponentResolvers | {},

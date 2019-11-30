@@ -1,14 +1,12 @@
 import { CreateElement, VNode } from 'vue'
 import { RichTextNode, Blocks, helpers } from '@/rich-text-types'
 import { ComponentRenderers, defaultComponentResolver } from '@/renderer/component'
-import { TagRenderFunction } from '@/renderer'
 
 interface NodeResolver {
-  tag?: string | TagRenderFunction
-  render?: (node: RichTextNode, key: string, h: CreateElement, next: Function, componentRenderers: ComponentRenderers) => VNode | VNode[]
+  tag?: string
 }
 
-type NodeResolverFunction = (node: RichTextNode, key: string, h: CreateElement) => VNode | VNode[]
+type NodeResolverFunction = (node: RichTextNode, key: string, h: CreateElement, next: Function, componentRenderers: ComponentRenderers) => VNode | VNode[]
 
 interface NodeResolvers {
   [key: string]: NodeResolver | NodeResolverFunction
@@ -23,10 +21,9 @@ interface NodeRenderer {
 }
 
 const defaultNodeResolvers: NodeResolvers = {
-  [Blocks.HEADING]: {
-    tag: (node) => {
-      return node.attrs.level ? `h${node.attrs.level}` : 'h2'
-    }
+  [Blocks.HEADING]: (node, key, h, next) => {
+    const tag = node.attrs.level ? `h${node.attrs.level}` : 'h2'
+    return h(tag, { key }, next(node.content, key, h, next))
   },
   [Blocks.PARAGRAPH]: {
     tag: 'p'
@@ -55,18 +52,16 @@ const defaultNodeResolvers: NodeResolvers = {
   [Blocks.IMAGE]: (node, key, h) => {
     return h('img', { key, attrs: node.attrs })
   },
-  [Blocks.COMPONENT]: {
-    render: (node, key, h, next, componentRenderers) => {
-      const resolvers: any[] = []
+  [Blocks.COMPONENT]: (node, key, h, next, componentRenderers) => {
+    const resolvers: any[] = []
 
-      node.attrs.body.forEach((item: RichTextNode, i: number) => {
-        const scopedKey = `${key}-${i}`
-        const resolvedComponent = componentRenderers[item.component]
-        resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
-      })
+    node.attrs.body.forEach((item: RichTextNode, i: number) => {
+      const scopedKey = `${key}-${i}`
+      const resolvedComponent = componentRenderers[item.component]
+      resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
+    })
 
-      return resolvers
-    }
+    return resolvers
   }
 }
 
@@ -79,15 +74,10 @@ const buildNodeRenderers = (nodeResolvers: NodeResolvers, componentRenderers: Co
       const resolver = mergedResolvers[key]
       nodeRenderers[key] = (node, key, h, next) => {
         if (typeof resolver === 'function') {
-          return resolver(node, key, h)
+          return resolver(node, key, h, next, componentRenderers)
         }
 
-        if (resolver.render) {
-          return resolver.render(node, key, h, next, componentRenderers)
-        }
-
-        const tag = typeof resolver.tag === 'function' ? resolver.tag(node) : resolver.tag
-        return h(tag, { key }, !helpers.isVoidElement(node) ? next(node.content, key, h, next) : null)
+        return h(resolver.tag, { key }, !helpers.isVoidElement(node) ? next(node.content, key, h, next) : null)
       }
     }
   }
