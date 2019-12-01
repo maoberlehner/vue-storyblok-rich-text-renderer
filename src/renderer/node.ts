@@ -34,7 +34,7 @@ const defaultNodeResolvers: NodeResolvers = {
     return h('img', { key, attrs: node.attrs })
   },
   [Blocks.COMPONENT]: (node, key, h, next, componentRenderers) => {
-    const resolvers: any[] = []
+    const resolvers: VNode[] = []
 
     node.attrs.body.forEach((item: RichTextNode, i: number) => {
       const scopedKey = `${key}-${i}`
