@@ -10,7 +10,7 @@ Vue.use(RichTextRenderer, {
       data: (node) => {
         return {
           props: {
-            test: 'Awesome prop'
+            test: node.title
           }
         }
       }
