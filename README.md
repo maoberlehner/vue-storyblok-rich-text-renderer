@@ -7,12 +7,39 @@
 
 Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.storyblok.com/) without using Vue.js runtime compiler.
 
-## Introduction
+## :bookmark_tabs: Table of contents
+- [Introduction](#introduction)
+- [Install](#install)
+    - [yarn](#yarn)
+    - [npm](#npm)
+- [Usage](#usage)
+- [Resolvers](#resolvers)
+    - [Blocks](#blocks)
+        - [HEADING](#heading)
+        - [PARAGRAPH](#paragraph)
+        - [QUOTE](#quote)
+        - [OL_LIST](#ol_list)
+        - [UL_LIST](#ul_list)
+        - [LIST_ITEM](#list_item)
+        - [CODE_BLOCK](#code_block)
+        - [HR](#hr)
+        - [BR](#br)
+        - [IMAGE](#image)
+        - [COMPONENT](#component)
+    - [Marks](#marks)
+        - [BOLD](#bold)
+        - [STRONG](#strong)
+        - [STRIKE](#strike)
+        - [UNDERLINE](#underline)
+        - [ITALIC](#italic)
+        - [CODE](#code)
+
+## :loudspeaker: Introduction
 This plugin gives you a simple & fast way to render rich text content from Storyblok in Vue.js.
 Currently Storyblok provides the [Rich Text Resolver](https://www.storyblok.com/docs/richtext-field#vue-js) for that but needs the [Vue.js Runtime Compiler](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only) for the [Inline Components](https://www.storyblok.com/docs/richtext-field#javascript-sdk).
 Because I didn't want the bigger bundle size I wrote this plugin. So feel free to use it! :blush:
 
-## Install
+## :rocket: Install
 ### yarn
 ```
 yarn add @marvinrudolph/vue-storyblok-rich-text-renderer
@@ -23,8 +50,8 @@ yarn add @marvinrudolph/vue-storyblok-rich-text-renderer
 npm install @marvinrudolph/vue-storyblok-rich-text-renderer --save
 ```
 
-## Usage
-```js
+## :pencil2: Usage
+```ts
 import RichTextRenderer from 'vue-storyblok-rich-text-renderer'
 
 // Simple
@@ -36,89 +63,215 @@ Vue.use(RichTextRenderer, {
 })
 ```
 
-If you don't use custom components in your rich text content everything should be good now. :ok_hand:
+If you don't use custom components in your rich text content you should be good now. :ok_hand:
 
-### Options
+## :wrench: Options
 
-#### `nodeResolvers`
-> Resolver definitions for each (block) element like `h2` or `p`. Will be merged with the default ones.
-
-**Type**|**Default**
------|-----
-`Object`|[Default NodeResolvers]()
-
-##### Example
-```js
-{
-    // Simple tag
-    [Blocks.PARAGRAPH]: {
-        tag: 'custom-paragraph'
-    },
-
-    // Dynamic tag based on props of `node`
-    [Blocks.HEADING]: {
-        tag: (node) => {
-            return node.attrs.level ? `h${node.attrs.level}` : 'h2'
-        }
-    },
-
-    // Dynamic rendered element
-    // Passes attributes like `src`, `title` or `alt` directly to the component
-    [Blocks.IMAGE]: (node, key, h) => {
-        return h('img', { key, attrs: node.attrs })
-    }
+## Resolvers
+### Blocks
+#### `HEADING`
+**Default:**
+```ts
+[Blocks.HEADING]: (node, key, h, next) => {
+    const tag = node.attrs.level ? `h${node.attrs.level}` : 'h2'
+    return h(tag, { key }, next(node.content, key, h, next))
 }
 ```
 
-#### `markResolvers`
-> Resolver definitions for each text style like `strong` or `italic`. Will be merged with the default ones.
+#### `PARAGRAPH`
+**Default:**
+```ts
+[Blocks.PARAGRAPH]: 'p'
+```
 
-**Type**|**Default**
------|-----
-`Object`|[Default MarkResolvers]()
+**Example output:**
+```html
+<p>Some text</p>
+```
 
-##### Example
-```js
-{
-    // Custom strong
-    // Renders `strong` as `<custom-strong>something</custom-strong>`
-    [Marks.STRONG]: {
-        tag: 'custom-strong'
-    }
+#### `QUOTE`
+**Default:**
+```ts
+[Blocks.QUOTE]: 'blockquote'
+```
+
+**Example output:**
+```html
+<blockquote>Some quote</blockquote>
+```
+
+#### `OL_LIST`
+**Default:**
+```ts
+[Blocks.OL_LIST]: 'ol'
+```
+
+**Example output:**
+```html
+<ol>
+    ...
+</ol>
+```
+
+#### `UL_LIST`
+**Default:**
+```ts
+[Blocks.UL_LIST]: 'ul'
+```
+
+**Example output:**
+```html
+<ul>
+    ...
+</ul>
+```
+
+#### `LIST_ITEM`
+**Default:**
+```ts
+[Blocks.LIST_ITEM]: 'li'
+```
+
+**Example output:**
+```html
+<li>Item</li>
+```
+
+#### `CODE_BLOCK`
+**Default:**
+```ts
+[Blocks.CODE_BLOCK]: (node, key, h, next) => {
+    return h('code', { key, attrs: node.attrs }, next(node.content, key, h, next))
 }
 ```
 
-#### `componentResolvers`
-> Resolver definitions for each custom component.
+**Example output:**
+```html
+<code class="language-javascript">Code</code>
+```
 
-**Type**|**Default**
------|-----
-`Object`|`{}`
+#### `HR`
+**Default:**
+```ts
+[Blocks.HR]: 'hr'
+```
 
-##### Example
-```js
-{
-    // Renders Storyblok component with name `button`
-    // as `<custom-button>`
-    'button': {
-        // Would be `CustomButton.vue`
-        component: 'custom-button',
+**Example output:**
+```html
+<hr />
+```
 
-        // Pass data from Storyblok to component
-        // Returns data object from Vue - `class`, `props`, `attrs` available
-        data: (node) => {
-            return {
-                props: {
-                    test: 'Some value'
-                }
-            }
-        }
-    }
+#### `BR`
+**Default:**
+```ts
+[Blocks.BR]: 'br'
+```
+
+**Example output:**
+```html
+<br />
+```
+
+#### `IMAGE`
+**Default:**
+```ts
+[Blocks.IMAGE]: (node, key, h) => {
+    return h('img', { key, attrs: node.attrs })
 }
 ```
 
-### Default Resolvers
-#### NodeResolvers
+**Example output:**
+```html
+<img src="//a.storyblok.com/f/91847/400x303/fn28dnj213/image.png" alt="Alternative" title="My image" />
+```
+
+#### `COMPONENT`
+**Default:**
+```ts
+[Blocks.COMPONENT]: (node, key, h, next, componentRenderers) => {
+    const resolvers: VNode[] = []
+
+    node.attrs.body.forEach((item: RichTextNode, i: number) => {
+        const scopedKey = `${key}-${i}`
+        const resolvedComponent = componentRenderers[item.component]
+        resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
+    })
+
+    return resolvers
+}
+```
+
+**Example output:**
+```html
+<custom-component :my-prop="Prop from Storyblok" />
+```
+
+### Marks
+#### `BOLD`
+**Default:**
+```ts
+[Marks.BOLD]: 'strong'
+```
+
+**Example output:**
+```html
+<strong>Bold</strong>
+```
+
+#### `STRONG`
+**Default:**
+```ts
+[Marks.STRONG]: 'strong'
+```
+
+**Example output:**
+```html
+<strong>Bold</strong>
+```
+
+#### `STRIKE`
+**Default:**
+```ts
+[Marks.STRIKE]: 's'
+```
+
+**Example output:**
+```html
+<s>Striked</s>
+```
+
+#### `UNDERLINE`
+**Default:**
+```ts
+[Marks.UNDERLINE]: 'u'
+```
+
+**Example output:**
+```html
+<u>Underlined</u>
+```
+
+#### `ITALIC`
+**Default:**
+```ts
+[Marks.ITALIC]: 'i'
+```
+
+**Example output:**
+```html
+<i>Italic</i>
+```
+
+#### `CODE`
+**Default:**
+```ts
+[Marks.CODE]: 'code'
+```
+
+**Example output:**
+```html
+<code>Inline code</code>
+```
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/@marvinrudolph/vue-storyblok-rich-text-renderer/latest.svg?style=flat-square
