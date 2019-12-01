@@ -27,7 +27,9 @@ const defaultNodeResolvers: NodeResolvers = {
   [Blocks.OL_LIST]: 'ol',
   [Blocks.UL_LIST]: 'ul',
   [Blocks.LIST_ITEM]: 'li',
-  [Blocks.CODE_BLOCK]: 'code',
+  [Blocks.CODE_BLOCK]: (node, key, h, next) => {
+    return h('code', { key, attrs: node.attrs }, next(node.content, key, h, next))
+  },
   [Blocks.HR]: 'hr',
   [Blocks.BR]: 'br',
   [Blocks.IMAGE]: (node, key, h) => {
@@ -39,7 +41,11 @@ const defaultNodeResolvers: NodeResolvers = {
     node.attrs.body.forEach((item: RichTextNode, i: number) => {
       const scopedKey = `${key}-${i}`
       const resolvedComponent = componentRenderers[item.component]
-      resolvers.push(resolvedComponent ? resolvedComponent(item, scopedKey, h) : defaultComponentResolver(item, scopedKey, h))
+      resolvers.push(
+        resolvedComponent
+          ? resolvedComponent(item, scopedKey, h)
+          : defaultComponentResolver(item, scopedKey, h)
+      )
     })
 
     return resolvers
