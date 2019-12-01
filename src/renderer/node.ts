@@ -2,18 +2,15 @@ import { CreateElement, VNode } from 'vue'
 import { RichTextNode, Blocks, helpers } from '@/rich-text-types'
 import { ComponentRenderers, defaultComponentResolver } from '@/renderer/component'
 
-interface NodeResolver {
-  tag?: string
+type NodeRenderers = {
+  [key: string]: NodeRenderer
 }
 
+type NodeResolver = string
 type NodeResolverFunction = (node: RichTextNode, key: string, h: CreateElement, next: Function, componentRenderers: ComponentRenderers) => VNode | VNode[]
 
 interface NodeResolvers {
   [key: string]: NodeResolver | NodeResolverFunction
-}
-
-type NodeRenderers = {
-  [key: string]: NodeRenderer
 }
 
 interface NodeRenderer {
@@ -25,30 +22,14 @@ const defaultNodeResolvers: NodeResolvers = {
     const tag = node.attrs.level ? `h${node.attrs.level}` : 'h2'
     return h(tag, { key }, next(node.content, key, h, next))
   },
-  [Blocks.PARAGRAPH]: {
-    tag: 'p'
-  },
-  [Blocks.QUOTE]: {
-    tag: 'blockquote'
-  },
-  [Blocks.OL_LIST]: {
-    tag: 'ol'
-  },
-  [Blocks.UL_LIST]: {
-    tag: 'ul'
-  },
-  [Blocks.LIST_ITEM]: {
-    tag: 'li'
-  },
-  [Blocks.CODE_BLOCK]: {
-    tag: 'code'
-  },
-  [Blocks.HR]: {
-    tag: 'hr'
-  },
-  [Blocks.BR]: {
-    tag: 'br'
-  },
+  [Blocks.PARAGRAPH]: 'p',
+  [Blocks.QUOTE]: 'blockquote',
+  [Blocks.OL_LIST]: 'ol',
+  [Blocks.UL_LIST]: 'ul',
+  [Blocks.LIST_ITEM]: 'li',
+  [Blocks.CODE_BLOCK]: 'code',
+  [Blocks.HR]: 'hr',
+  [Blocks.BR]: 'br',
   [Blocks.IMAGE]: (node, key, h) => {
     return h('img', { key, attrs: node.attrs })
   },
@@ -77,7 +58,7 @@ const buildNodeRenderers = (nodeResolvers: NodeResolvers, componentRenderers: Co
           return resolver(node, key, h, next, componentRenderers)
         }
 
-        return h(resolver.tag, { key }, !helpers.isVoidElement(node) ? next(node.content, key, h, next) : null)
+        return h(resolver, { key }, !helpers.isVoidElement(node) ? next(node.content, key, h, next) : null)
       }
     }
   }
@@ -86,9 +67,10 @@ const buildNodeRenderers = (nodeResolvers: NodeResolvers, componentRenderers: Co
 }
 
 export {
-  NodeResolver,
-  NodeResolvers,
   NodeRenderers,
+  NodeResolver,
+  NodeResolverFunction,
+  NodeResolvers,
   NodeRenderer,
   defaultNodeResolvers,
   buildNodeRenderers

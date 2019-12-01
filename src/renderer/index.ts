@@ -4,7 +4,7 @@ import { MarkRenderers, MarkResolvers, buildMarkRenderers, textRenderer } from '
 import { ComponentRenderers, ComponentResolvers, buildComponentRenderers } from '@/renderer/component'
 import { RichTextNode, helpers } from '@/rich-text-types'
 
-export interface RichTextRenderer {
+interface RichTextRenderer {
   node: NodeRenderers,
   mark: MarkRenderers,
   component: ComponentRenderers,
@@ -58,4 +58,8 @@ const renderNode = (node: RichTextNode, key: string, renderer: RichTextRenderer)
   }
 }
 
-export { buildRenderer, renderNodeList }
+export {
+  RichTextRenderer,
+  buildRenderer,
+  renderNodeList
+}
