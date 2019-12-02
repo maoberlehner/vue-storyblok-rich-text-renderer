@@ -7,7 +7,6 @@
 <script lang="ts">
 import Vue, { CreateElement } from 'vue'
 import { Marks } from './rich-text-types'
-import StoryblokClient from 'storyblok-js-client'
 
 export default Vue.extend({
   components: {
