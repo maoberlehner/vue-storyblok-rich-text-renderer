@@ -164,7 +164,7 @@ Name | Type | Description
 
 ```ts
 // Example usage
-next(node.conent, key, h, next)
+next(node.content, key, h, next)
 ```
 
 ### `MarkResolver`
