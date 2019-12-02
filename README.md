@@ -15,6 +15,9 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
   - [npm](#npm)
 - [Usage](#pencil2-usage)
 - [Options](#wrench-options)
+  - [nodeResolvers](#node-resolvers)
+  - [markResolvers](#mark-resolvers)
+  - [componentResolvers](#component-resolvers)
 - [Resolvers](#electric_plug-resolvers)
   - [Blocks](#blocks)
     - [HEADING](#heading)
@@ -70,9 +73,125 @@ Vue.use(RichTextRenderer, {
 })
 ```
 
+> For available properties see [Options](#wrench-options).
+
 If you don't use custom components in your rich text content you should be good now. :ok_hand:
 
 ## :wrench: Options
+
+### `nodeResolvers`
+
+**Type:** `object` with [`NodeResolver`](#node-resolver) definitions
+
+**Default:** See default [blocks](#blocks)
+
+**Example:**
+
+```ts
+{
+    [Blocks.PARAGRAPH]: 'custom-paragraph',
+    [Blocks.QUOTE]: 'custom-quote'
+}
+```
+
+### `markResolvers`
+
+**Type:** `object` with [`MarkResolver`](#mark-resolver) definitions
+
+**Default:** See default [marks](#marks)
+
+**Example:**
+
+```ts
+{
+    [Marks.STRONG]: 'custom-strong',
+    [Marks.UNDERLINE]: 'custom-underline'
+}
+```
+
+### `componentResolvers`
+
+**Type:** `object` with [`ComponentResolver`](#component-resolver) definitions
+
+**Default:** `{}`
+
+**Example:**
+
+```ts
+componentResolvers: {
+    // Key resolves to technical name of your component created in Storyblok
+    'button': {
+        component: 'custom-button',
+        data: (node) => {
+            return {
+                props: {
+                    test: node.title
+                }
+            }
+        }
+    }
+}
+```
+
+## :straight_ruler: Definitions
+
+### `NodeResolver`
+
+**Type:** `string` | `function`
+
+**Variants:**
+
+#### 1. Simple `string` with tag as value e.g. `'p'` or `'div'`**
+
+#### 2. Function which returns a render function. You can be more dynamically here and pass additional props for example
+
+Available parameters:
+
+Name | Type | Description
+--- | --- | ---
+`node` | `object` | The node/data from Storyblok
+`key` | `string` | Auto-generated key. Is automatically incremented with a number. => `RichText-{i}`
+`h` | `function` | Render function from Vue (`'createElement'`)
+`next` | `function` | Renders next nodes inside the current element. You'll need it if you have an element with any content (child nodes or text). **Void elements like `<img />` don't need it.**
+`componentRenderers` | `object` | Component renderers auto-generated from `componentResolvers`. **You probably won't need this outside of the `[Blocks.COMPONENT]`.**
+
+**Hint for `next` function: You need to pass `node.content`, `key`, `h` and the `next` itself.**
+**Example:**
+
+```ts
+// Example usage
+next(node.conent, key, h, next)
+```
+
+### `MarkResolver`
+
+**Type:** `string` | `function`
+
+**Variants:**
+
+#### 1. Simple `string` with tag as value e.g. `'strong'` or `'u'`**
+
+#### 2. Function which returns a render function. You can be more dynamically here and pass additional props for example
+
+Available parameters:
+
+Name | Type | Description
+--- | --- | ---
+`node` | `object` | The node/data from Storyblok
+`key` | `string` | Auto-generated key. Is automatically incremented with a number. => `RichText-{i}`
+`h` | `function` | Render function from Vue (`'createElement'`)
+`text` | `string` | Text content of the mark
+
+### `ComponentResolver`
+
+**Type:** `object`
+
+**Properties:**
+
+Name | Type | Description
+--- | --- | ---
+`component` | `string` | Name of your custom component
+`data` | `function` | Access to your current Storyblok `node` as parameter. Returns [Data Object](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth) of Vue.js which will be passed to the component.
 
 ## :electric_plug: Resolvers
 
