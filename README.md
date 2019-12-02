@@ -9,12 +9,13 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
 
 ## :bookmark_tabs: Table of contents
 
-- [Introduction](#introduction)
-- [Install](#install)
+- [Introduction](#loudspeaker-introduction)
+- [Install](#rocket-install)
   - [yarn](#yarn)
   - [npm](#npm)
-- [Usage](#usage)
-- [Resolvers](#resolvers)
+- [Usage](#pencil2-usage)
+- [Options](#wrench-options)
+- [Resolvers](#electric_plug-resolvers)
   - [Blocks](#blocks)
     - [HEADING](#heading)
     - [PARAGRAPH](#paragraph)
@@ -73,7 +74,7 @@ If you don't use custom components in your rich text content you should be good 
 
 ## :wrench: Options
 
-## Resolvers
+## :electric_plug: Resolvers
 
 ### Blocks
 
