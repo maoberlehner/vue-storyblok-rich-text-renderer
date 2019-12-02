@@ -38,6 +38,10 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
     - [UNDERLINE](#underline)
     - [ITALIC](#italic)
     - [CODE](#code)
+- [Definitions](#straight_ruler-definitions)
+  - [NodeResolver](#node-resolver)
+  - [MarkResolver](#mark-resolver)
+  - [ComponentResolver](#component-resolver)
 
 ## :loudspeaker: Introduction
 
