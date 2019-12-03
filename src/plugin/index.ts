@@ -31,4 +31,6 @@ const RichTextVueRenderer: PluginObject<Options> = {
   }
 }
 
+export * from '../rich-text-types'
+
 export default RichTextVueRenderer
