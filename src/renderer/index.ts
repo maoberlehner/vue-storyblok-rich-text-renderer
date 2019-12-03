@@ -1,8 +1,8 @@
 import { CreateElement } from 'vue'
-import { NodeRenderers, NodeResolvers, buildNodeRenderers } from '@/renderer/node'
-import { MarkRenderers, MarkResolvers, buildMarkRenderers, textRenderer } from '@/renderer/mark'
-import { ComponentRenderers, ComponentResolvers, buildComponentRenderers } from '@/renderer/component'
-import { RichTextNode, helpers } from '@/rich-text-types'
+import { NodeRenderers, NodeResolvers, buildNodeRenderers } from './node'
+import { MarkRenderers, MarkResolvers, buildMarkRenderers, textRenderer } from './mark'
+import { ComponentRenderers, ComponentResolvers, buildComponentRenderers } from './component'
+import { RichTextNode, helpers } from '../rich-text-types'
 
 interface RichTextRenderer {
   node: NodeRenderers,

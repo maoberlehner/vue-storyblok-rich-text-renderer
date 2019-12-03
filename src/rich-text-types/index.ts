@@ -1,6 +1,6 @@
-import Blocks from '@/rich-text-types/blocks'
-import Marks from '@/rich-text-types/marks'
-import * as helpers from '@/rich-text-types/helpers'
+import Blocks from './blocks'
+import Marks from './marks'
+import * as helpers from './helpers'
 
 export interface RichTextDocument {
   content: RichTextNode[]

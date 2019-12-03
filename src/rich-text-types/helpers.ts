@@ -1,4 +1,4 @@
-import { RichTextNode, Blocks } from '@/rich-text-types'
+import { RichTextNode, Blocks } from './'
 
 export function isText (node: RichTextNode) {
   return node.type === 'text'

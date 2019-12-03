@@ -1,5 +1,5 @@
 import { CreateElement, VNode } from 'vue'
-import { Marks, Mark, RichTextNode } from '@/rich-text-types'
+import { Marks, Mark, RichTextNode } from '../rich-text-types'
 
 type MarkResolver = string
 type MarkResolverFunction = (node: RichTextNode, key: string, h: CreateElement, text: string) => VNode
