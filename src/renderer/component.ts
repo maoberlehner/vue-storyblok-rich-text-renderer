@@ -1,8 +1,9 @@
-import { CreateElement, VNodeData } from 'vue'
+import { CreateElement, VNodeData, VNodeChildren } from 'vue'
 import { RichTextNode } from '../rich-text-types'
 
 interface ComponentResolver {
   component: string
+  children?: (node: RichTextNode, key: string, h: CreateElement) => VNodeChildren
   data?: (node: RichTextNode) => VNodeData
 }
 
@@ -33,7 +34,7 @@ const buildComponentRenderers = (componentResolvers: ComponentResolvers) => {
       const resolver = componentResolvers[key]
       componentRenderers[key] = (node: RichTextNode, key: string, h: CreateElement) => {
         const data = resolver.data ? { key, ...resolver.data(node) } : { key }
-        return h(resolver.component, data)
+        return h(resolver.component, data, resolver.children ? resolver.children(node, key, h) : null)
       }
     }
   }

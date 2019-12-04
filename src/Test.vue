@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>Test: Value passed: {{ test }}</h3>
+    <slot />
   </div>
 </template>
 
