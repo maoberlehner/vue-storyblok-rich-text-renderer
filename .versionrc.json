@@ -1,0 +1,9 @@
+{
+    "types": [
+        {"type":"feat","section":":sparkles: Features"},
+        {"type":"fix","section":":bug: Bug Fixes"},
+        {"type":"test","section":":white_check_mark: Tests", "hidden": true},
+        {"type":"build","section":":construction_worker: Build System", "hidden": true},
+        {"type":"ci","hidden":true}
+    ]
+}
