@@ -1,6 +1,6 @@
 {
   "name": "@marvinrudolph/vue-storyblok-rich-text-renderer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Vue.js plugin to render rich text content from Storyblok",
   "author": {
     "name": "Marvin Rudolph",
