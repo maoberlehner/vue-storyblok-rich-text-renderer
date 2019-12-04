@@ -42,6 +42,7 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
   - [NodeResolver](#node-resolver)
   - [MarkResolver](#mark-resolver)
   - [ComponentResolver](#component-resolver)
+- [License](#ticket-license)
 
 ## :loudspeaker: Introduction
 
@@ -124,8 +125,11 @@ If you don't use custom components in your rich text content you should be good 
 ```ts
 componentResolvers: {
     // Key resolves to technical name of your component created in Storyblok
-    'button': {
+    button: {
         component: 'custom-button',
+        children: (node, key, h) => {
+            return h('div', { key: `${key}-0` }, 'children')
+        },
         data: (node) => {
             return {
                 props: {
@@ -195,6 +199,7 @@ Name | Type | Description
 Name | Type | Description
 --- | --- | ---
 `component` | `string` | Name of your custom component
+`children` | `function` | Function with `node`, `key` & `h`(`createElement` function) as parameters. Returns `VNodeChildren` so it can be e.g a simple `string`, `VNode` or an array of `VNode`. Children can then be accessed with `$slots`/`$slots.default` in your component or in your template with `<slot />`. See [example](#component-resolvers) for that.
 `data` | `function` | Access to your current Storyblok `node` as parameter. Returns [Data Object](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth) of Vue.js which will be passed to the component.
 
 ## :electric_plug: Resolvers
@@ -455,6 +460,12 @@ Name | Type | Description
 ```html
 <code>Inline code</code>
 ```
+
+## :ticket: License
+
+[MIT License](./LICENSE)
+
+Copyright (c) Marvin Rudolph [info@marvin-rudolph.de](mailto:info@marvin-rudolph.de)
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/@marvinrudolph/vue-storyblok-rich-text-renderer/latest.svg?style=flat-square
