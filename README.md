@@ -14,6 +14,7 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
   - [yarn](#yarn)
   - [npm](#npm)
 - [Usage](#pencil2-usage)
+  - [With Nuxt.js](#green_heart-with-nuxt.js)
 - [Options](#wrench-options)
   - [nodeResolvers](#node-resolvers)
   - [markResolvers](#mark-resolvers)
@@ -67,6 +68,7 @@ npm install @marvinrudolph/vue-storyblok-rich-text-renderer --save
 ## :pencil2: Usage
 
 ```ts
+import Vue from 'vue'
 import RichTextRenderer from 'vue-storyblok-rich-text-renderer'
 
 // Simple
@@ -81,6 +83,28 @@ Vue.use(RichTextRenderer, {
 > For available properties see [Options](#wrench-options).
 
 If you don't use custom components in your rich text content you should be good now. :ok_hand:
+
+### :green_heart: With Nuxt.js
+
+You can use and implement this plugin like every other Vue.js plugin in Nuxt.js with `Vue.use()`.
+Read more about [Nuxt.js plugins](https://nuxtjs.org/guide/plugins).
+
+1. Create a file named `rich-text-resolver.js` in `plugins/` with the contents from [above](#pencil2-usage)
+2. Add it to the `plugins` property in your `nuxt.config.js`
+
+> If you use TypeScript don't forget to change `.js` to `.ts`. :blush:
+
+```ts
+// nuxt.config.js
+{
+    // [...] other config
+    plugins: [
+        '~/plugins/rich-text-resolver.js'
+    ]
+}
+```
+
+**Congrats! :tada: You have successfully implemented the plugin and you can now use the `<rich-text-resolver />` component.**
 
 ## :wrench: Options
 
