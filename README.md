@@ -149,7 +149,7 @@ componentResolvers: {
 
 **Variants:**
 
-#### 1. Simple `string` with tag as value e.g. `'p'` or `'div'`**
+#### 1. Simple `string` with tag as value e.g. `'p'` or `'div'`
 
 #### 2. Function which returns a render function. You can be more dynamically here and pass additional props for example
 
@@ -177,7 +177,7 @@ next(node.content, key, h, next)
 
 **Variants:**
 
-#### 1. Simple `string` with tag as value e.g. `'strong'` or `'u'`**
+#### 1. Simple `string` with tag as value e.g. `'strong'` or `'u'`
 
 #### 2. Function which returns a render function. You can be more dynamically here and pass additional props for example
 
