@@ -14,7 +14,7 @@ Vue.js plugin for rendering rich text content from [Storyblok CMS](https://www.s
   - [yarn](#yarn)
   - [npm](#npm)
 - [Usage](#pencil2-usage)
-  - [With Nuxt.js](#green_heart-with-nuxt.js)
+  - [With Nuxt.js](#green_heart-with-nuxtjs)
 - [Options](#wrench-options)
   - [nodeResolvers](#node-resolvers)
   - [markResolvers](#mark-resolvers)
