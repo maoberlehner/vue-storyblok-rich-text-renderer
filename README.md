@@ -84,7 +84,7 @@ In your `<template>`:
 
 ```html
 <!-- `document` is the object from Storyblok with `type` "doc" -->
-<rich-text-renderer v-if="document" :document="document" >
+<rich-text-renderer v-if="document" :document="document" />
 ```
 
 > For available properties see [Options](#wrench-options).
