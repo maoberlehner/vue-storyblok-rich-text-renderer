@@ -69,7 +69,7 @@ npm install @marvinrudolph/vue-storyblok-rich-text-renderer --save
 
 ```ts
 import Vue from 'vue'
-import RichTextRenderer from 'vue-storyblok-rich-text-renderer'
+import RichTextRenderer from '@marvinrudolph/vue-storyblok-rich-text-renderer'
 
 // Simple
 Vue.use(RichTextRenderer)
