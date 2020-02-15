@@ -27,7 +27,7 @@ const RichTextVueRenderer: PluginObject<Options> = {
       }
     })
 
-    Vue.component('rich-text-renderer', RichTextRenderer)
+    Vue.component('RichTextRenderer', RichTextRenderer)
   }
 }
 
